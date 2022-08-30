@@ -78,6 +78,4 @@ shinyServer(function(input, output) {
             toString(round(sum((y-polyFun(x))^2)))
         })
     })
-    
-    
 })
