@@ -1,0 +1,49 @@
+---
+title: "Manual Least Squares App for Polynomial Regression"
+author: "Leon Joshua Gensel"
+date: "`r Sys.Date()`"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(2)
+```
+
+## Motivation
+
+Math heavy topics are often relevant in all sorts of scientific fields, but the theoretical nature of them often makes them hard to approach. I think what would make it much easier for researchers and students if math education would consider more hands-on or even gamified teaching methods. I would even argue that this could lead to deeper understanding and better intuition for math heavy methodologies. As an example for such a teaching method I build a shiny app where the user can try and fit a polynomial regression onto simulated data. I hope this achieves a hands-on and fun experience learning about least squares and polynomial regression.
+
+## How the data is simulated
+
+x values are uniformly randomized. Then for each polynomial term (up to the 3rd degree) we randomize if it is included and if it is, a coefficient for it. After all terms we add a bit of random normal noise.
+```{r}
+x    <- runif(40,min = -10,max = 10)
+b0 <- ifelse(runif(1,0,1) > 0.5,0,round(runif(1,-10,10)))
+b1 <- ifelse(runif(1,0,1) > 0.5,0,round(runif(1,-10,10)))
+b2 <- ifelse(runif(1,0,1) > 0.5,0,round(runif(1,-10,10)))
+b3 <- ifelse(runif(1,0,1) > 0.5,0,round(runif(1,-10,10)))
+y_noNoise <- b3*x^3 + b2*x^2 + b1*x + b0
+sd_noise <- ifelse(max(y_noNoise)>abs(min(y_noNoise)),
+                   max(y_noNoise)/5 + .1,
+                   abs(min(y_noNoise))/5+.1)
+y <- y_noNoise + rnorm(length(y_noNoise), sd = sd_noise)
+df <- data.frame(x, y)
+```
+
+## Plotting
+
+Then the user can define their polynomial. The app will output a plot of the simulated data with a regression line of the polynomial and visualized residuals. In addition it will show the sum of squared residuals so the user can try and get the best fit.
+```{r, echo=FALSE}
+polyFun <- function(x) 0*x^3+4*x^2+5*x+25
+ggplot(df,aes(x = x, y = y)) + 
+                geom_point(size = 3) + 
+                stat_function(fun = polyFun) +
+                geom_segment(aes(xend = x, yend = polyFun(x), col = "red")) +
+                scale_color_manual(labels = c("residuals"), values = "red")
+```
+
+## Thanks
+
+for visiting and I hope you enjoy the app :)

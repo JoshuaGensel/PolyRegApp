@@ -34,10 +34,10 @@ shinyServer(function(input, output) {
         x    <- runif(input$nPointsSlider,min = -10,max = 10)
         b0 <- ifelse(runif(1,0,1) > 0.5,
                      0,
-                     round(runif(1,-10,10)))
+                     round(runif(1,-100,100)))
         b1 <- ifelse(runif(1,0,1) > 0.5,
                      0,
-                     round(runif(1,-10,10)))
+                     round(runif(1,-100,100)))
         b2 <- ifelse(runif(1,0,1) > 0.5,
                      0,
                      round(runif(1,-10,10)))
